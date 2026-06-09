@@ -2,6 +2,7 @@ import { create, StateCreator } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 import { customSessionStorage } from "../storages";
+import { useWeddingBoundStore } from "../wedding";
 
 type _Person = {
     firstName: string;
@@ -21,8 +22,8 @@ type _ActionsPerson = {
 const personState: StateCreator<_Person & _ActionsPerson, [["zustand/devtools", never], ['zustand/persist', unknown]]> = (set) => ({
     firstName: '',
     lastName: '',
-    setFirstName: (value: string) => set(({ firstName: value }),undefined, 'setFirstName'),
-    setLastName: (value: string) => set(({ lastName: value }),undefined, 'setLastName'),
+    setFirstName: (value: string) => set(({ firstName: value }), undefined, 'setFirstName'),
+    setLastName: (value: string) => set(({ lastName: value }), undefined, 'setLastName'),
 });
 
 //* devtools: para visualizar el state en el navegador, como redux
@@ -33,3 +34,7 @@ export const usePersonStore = create<_Person & _ActionsPerson>()(
         persist(personState, { name: 'person-storage', storage: customSessionStorage }),
     ),
 );
+
+usePersonStore.subscribe((nextState) => {
+    useWeddingBoundStore.setState({ firstName: nextState.firstName, lastName: nextState.lastName });
+})
