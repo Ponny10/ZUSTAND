@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 package-lock.json
+docker-compose.yaml
+.env
 *.local
 
 # Editor directories and files
