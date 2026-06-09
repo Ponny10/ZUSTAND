@@ -1,8 +1,35 @@
+import { FormEvent } from 'react';
 import { WhiteCard } from '../../components';
+import { useWeddingBoundStore } from '../../store/wedding';
 
 
 
 export const WeddingInvitationPage = () => {
+  const firstName = useWeddingBoundStore(state => state.firstName);
+  const lastName = useWeddingBoundStore(state => state.lastName);
+  const setFirstName = useWeddingBoundStore(state => state.setFirstName);
+  const setLastName = useWeddingBoundStore(state => state.setLastName);
+
+  const guestCount = useWeddingBoundStore(state => state.guestCount);
+  const setGuestCount = useWeddingBoundStore(state => state.setGuestCount);
+
+  const eventYYYYMMDD = useWeddingBoundStore(state => state.eventYYYYMMDD());
+  const eventHHMM = useWeddingBoundStore(state => state.eventHHMM());
+  const setEventDate = useWeddingBoundStore(state => state.setEventDate);
+  const setEventTime = useWeddingBoundStore(state => state.setEventTime);
+
+  const isConfirm = useWeddingBoundStore(state => state.isConfirm);
+  const setIsConfirm = useWeddingBoundStore(state => state.setIsConfirm);
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log('DATA SEND FORM = ', {
+      firstName, lastName, guestCount, eventYYYYMMDD, eventHHMM, isConfirm
+    });
+
+  }
+
   return (
     <>
       <h1>Invitación de Boda</h1>
@@ -11,7 +38,7 @@ export const WeddingInvitationPage = () => {
 
       <WhiteCard className="flex items-center justify-center p-12">
         <div className="mx-auto w-full max-w-[550px]">
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
@@ -25,6 +52,8 @@ export const WeddingInvitationPage = () => {
                     name="firstName"
                     id="firstName"
                     placeholder="Primer Nombre"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
               </div>
@@ -40,6 +69,8 @@ export const WeddingInvitationPage = () => {
                     name="lastName"
                     id="lastName"
                     placeholder="Apellido"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -51,6 +82,8 @@ export const WeddingInvitationPage = () => {
                 ¿Cuántos invitados traerá?
               </label>
               <input
+                value={guestCount}
+                onChange={(e) => setGuestCount(+e.target.value)}
                 type="number"
                 name="guestNumber"
                 id="guestNumber"
@@ -59,7 +92,6 @@ export const WeddingInvitationPage = () => {
                 className="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
             </div>
-
             <div className="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
@@ -72,6 +104,8 @@ export const WeddingInvitationPage = () => {
                     type="date"
                     name="eventDate"
                     id="eventDate"
+                    value={eventYYYYMMDD}
+                    onChange={(e) => setEventDate(e.target.value)}
                   />
                 </div>
               </div>
@@ -86,11 +120,12 @@ export const WeddingInvitationPage = () => {
                     type="time"
                     name="eventTime"
                     id="eventTime"
+                    value={eventHHMM}
+                    onChange={(e) => setEventTime(e.target.value)}
                   />
                 </div>
               </div>
             </div>
-
             <div className="mb-5">
               <label className="mb-3 block text-base font-medium text-[#07074D]">
                 ¿Tu también vendrás?
@@ -102,6 +137,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton1"
                     className="h-5 w-5"
+                    checked={isConfirm}
+                    onClick={() => setIsConfirm(true)}
                   />
                   <label
                     className="pl-3 text-base font-medium text-[#07074D]"
@@ -115,6 +152,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton2"
                     className="h-5 w-5"
+                    checked={!isConfirm}
+                    onClick={() => setIsConfirm(false)}
                   />
                   <label
                     className="pl-3 text-base font-medium text-[#07074D]"
